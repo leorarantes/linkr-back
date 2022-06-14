@@ -20,9 +20,18 @@ async function createUser(name, email, password){
   `, [name, email, encryptedPassword]);
 };
 
+async function getUserById(id){
+  return connection.query(`
+    SELECT users.id, users.name, users.email, users."photoLink"
+    FROM users
+    WHERE id = $1  
+  `, [id]);
+}
+
 const usersRepository = {
-  checkUserEmail,
-  createUser
+  createUser,
+  getUserById,
+  checkUserEmail
 };
 
 export default usersRepository;
