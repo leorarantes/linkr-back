@@ -20,7 +20,7 @@ CREATE TABLE "posts" (
     "link" TEXT NOT NULL,
     "description" TEXT,
     "userId" INTEGER NOT NULL REFERENCES "users"("id"),
-    "likeCount" INTEGER,
+    "likeCount" INTEGER NOT NULL DEFAULT 0,
     "createdAt" TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
