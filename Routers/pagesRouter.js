@@ -10,6 +10,6 @@ import postSchema from "../Schemas/postSchema.js";
 const pagesRouter = Router();
 
 pagesRouter.get('/hashtag/:hashtag', validateToken, validateHashtag, getPostByHashtag)
-pagesRouter.post('/posts', validateSchema(postSchema), postUrl);
+pagesRouter.post('/posts', validateToken, validateSchema(postSchema), postUrl);
 
 export default pagesRouter;

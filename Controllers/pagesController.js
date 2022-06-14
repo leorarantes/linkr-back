@@ -16,8 +16,7 @@ export async function getPostByHashtag(req, res) {
 }
 
 export async function postUrl(req, res) {
-  // const {userId} = res.locals;
-  const userId = 1;
+  const { userId } = res.locals;
   const post = Object.values(req.body);
   const values = [...post, userId];
 
