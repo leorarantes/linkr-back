@@ -13,7 +13,7 @@ export async function signup(req,res){
       return res.sendStatus(409);
     }
     
-    await usersRepository.createUser(user.name, user.email, user.password);
+    await usersRepository.createUser(user.name, user.email, user.password, user.photoLink);
 
     return res.sendStatus(201);
   } catch (e) {
