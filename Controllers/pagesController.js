@@ -33,8 +33,6 @@ export async function getAllPosts(req,res) {
         })
       }
     }
-
-    console.log('oi')
     
     return res.send(response)
   }
