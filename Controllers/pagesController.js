@@ -16,12 +16,12 @@ export async function getPostByHashtag(req, res) {
 }
 
 export async function postUrl(req, res) {
-  const { userId } = res.locals;
+  const { user } = res.locals;
   const post = Object.values(req.body);
-  const values = [...post, userId];
+  const values = [...post, user.id];
 
   try {
-    await postsRepository.postUserUrl(values, userId);
+    await postsRepository.postUserUrl(values);
 
     return res.sendStatus(201);
   } catch (e) {
