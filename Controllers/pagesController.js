@@ -1,5 +1,7 @@
 import chalk from "chalk";
+
 import postsRepository from "../Repositories/postsRepository.js";
+import hashtagRepository from "../Repositories/hashtagsRepository.js";
 
 export async function getPostByHashtag(req, res) {
   const { id } = res.locals.hashtag;
@@ -26,6 +28,17 @@ export async function postUrl(req, res) {
     return res.sendStatus(201);
   } catch (e) {
     console.log(chalk.bold.red(e));
+    return res.sendStatus(500);
+  }
+}
+
+export async function getTrendingHashtags(req, res){
+  try {
+    const hashtagsRequest = await hashtagRepository.getTrendingHashtags();
+    const trendingHashtags = hashtagsRequest.rows
+    return res.status(200).send(trendingHashtags);
+  } catch (e) {
+    console.log(e);
     return res.sendStatus(500);
   }
 }
