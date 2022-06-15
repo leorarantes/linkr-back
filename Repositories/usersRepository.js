@@ -10,14 +10,14 @@ async function checkUserEmail(email){
   `, [email]);
 };
 
-async function createUser(name, email, password){
+async function createUser(name, email, password, photoLink){
   const SALT = 10;
   const encryptedPassword = bcrypt.hashSync(password, SALT);
 
   return connection.query(`
-    INSERT INTO users(name, email, password)
-    VALUES ($1, $2, $3);
-  `, [name, email, encryptedPassword]);
+    INSERT INTO users(name, email, password, "photoLink")
+    VALUES ($1, $2, $3, $4);
+  `, [name, email, encryptedPassword, photoLink]);
 };
 
 async function getUserById(id){
