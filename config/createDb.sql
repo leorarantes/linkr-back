@@ -12,6 +12,7 @@ CREATE TABLE "sessions" (
     "token" TEXT NOT NULL,
     "userId" INTEGER NOT NULL REFERENCES "users"("id"),
     "lastStatus" DOUBLE PRECISION NOT NULL,
+    "expired" BOOLEAN NOT NULL DEFAULT FALSE,
     "createdAt" TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
