@@ -10,6 +10,17 @@ async function getPostInfoByHashtag(hashtagId){
   `, [hashtagId])
 };
 
+async function getAllPosts(){
+  return connection.query(`
+      SELECT p.*, u.name AS username, u."photoLink" 
+      FROM posts p
+      JOIN users u 
+        ON p."userId" = u.id
+      ORDER BY "createdAt" DESC
+      LIMIT 20
+    `)
+};
+
 async function postUserUrl(values){
   return connection.query(`
     INSERT INTO posts(link, description, "userId") VALUES ($1, $2, $3);
@@ -18,7 +29,8 @@ async function postUserUrl(values){
 
 const postsRepository = {
   getPostInfoByHashtag,
-  postUserUrl
+  postUserUrl,
+  getAllPosts
 };
 
 export default postsRepository;
