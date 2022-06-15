@@ -17,7 +17,7 @@ export async function signup(req,res){
 
     return res.sendStatus(201);
   } catch (e) {
-    console.log(chalk.bold.red(e));
+    console.log(e);
     return res.sendStatus(500);
   }
 }
