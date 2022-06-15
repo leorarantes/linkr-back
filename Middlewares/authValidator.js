@@ -1,28 +1,34 @@
 import sessionsRepository from "../Repositories/sessionsRepository.js";
+import usersRepository from "../Repositories/usersRepository.js";
 
-async function validateToken(req,res,next){
+export async function validateToken(req, res, next) {
   const { authorization } = req.headers;
-  const token = authorization?.replace('Bearer ', '');
-
-  if(!token){
-    return res.status(401).send('No token')
-  }
+  const token = authorization?.replace("Bearer", "").trim();
+  if (!token) return res.status(401).send("No token.");
 
   try {
-    const tokenRequest = await sessionsRepository.checkToken(token);
-    if(tokenRequest.rowCount < 1){
-      return res.status(401).send('Invalid session');
-    };
+      const session = await sessionsRepository.checkToken(token);
+      if(session.rowCount === 0) return res.status(401).send("No session.");
 
-    const [session] = tokenRequest.rows;
-    const userId = session.userId;
+      const now = parseFloat((Date.now()/60000).toFixed(1));
+      const timeDifference = now - session.rows[0].lastStatus;
+      if (timeDifference > 60) {
+          await sessionsRepository.expireSession(session.rows[0].id);
+          return res.status(401).send("Session expired.");
+      }
 
-    res.locals.userId = userId;
-    next();
-  } catch (e) {
-    console.log(e);
-    return res.sendStatus(500);
+      const user = await usersRepository.getUserById(session.rows[0].userId);
+      if (user.rowCount === 0) return res.sendStatus(400);
+
+      await sessionsRepository.updateSessions(session.rows[0].id);
+
+      res.locals.user = user.rows[0];
+
+      next();
+  } catch (error) {
+      console.log("token", error);
+      res.status(500).send("Error checking token.");
   }
-};
+}
 
 export default validateToken;
