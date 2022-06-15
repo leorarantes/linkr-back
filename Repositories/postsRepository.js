@@ -10,8 +10,20 @@ async function getPostInfoByHashtag(hashtagId){
   `, [hashtagId])
 };
 
+async function getllPosts(){
+  return connection.query(`
+      SELECT p.*, u.name AS username, u."photoLink" 
+      FROM posts p
+      JOIN users u 
+        ON p."userId" = u.id
+      ORDER BY "createdAt" DESC
+      LIMIT 20
+    `)
+};
+
 const postsRepository = {
-  getPostInfoByHashtag
+  getPostInfoByHashtag,
+  getllPosts
 };
 
 export default postsRepository;

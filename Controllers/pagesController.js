@@ -14,3 +14,14 @@ export async function getPostByHashtag(req,res){
     return res.sendStatus(500);
   }
 }
+
+export async function getAllPosts(req,res) {
+  try {
+    const { rows : posts} = await postsRepository.getllPosts()
+    
+    return res.send(posts)
+  } catch (e) {
+    console.log(chalk.bold.red(e));
+    return res.sendStatus(500);
+  }
+}
