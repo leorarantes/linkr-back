@@ -12,6 +12,7 @@ CREATE TABLE "sessions" (
     "token" TEXT NOT NULL,
     "userId" INTEGER NOT NULL REFERENCES "users"("id"),
     "lastStatus" DOUBLE PRECISION NOT NULL,
+    "expired" BOOLEAN NOT NULL DEFAULT FALSE,
     "createdAt" TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
@@ -20,7 +21,11 @@ CREATE TABLE "posts" (
     "link" TEXT NOT NULL,
     "description" TEXT,
     "userId" INTEGER NOT NULL REFERENCES "users"("id"),
+<<<<<<< HEAD
     "likeCount" INTEGER DEFAULT 0,
+=======
+    "likeCount" INTEGER NOT NULL DEFAULT 0,
+>>>>>>> main
     "createdAt" TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
