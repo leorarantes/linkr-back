@@ -21,11 +21,7 @@ CREATE TABLE "posts" (
     "link" TEXT NOT NULL,
     "description" TEXT,
     "userId" INTEGER NOT NULL REFERENCES "users"("id"),
-<<<<<<< HEAD
-    "likeCount" INTEGER DEFAULT 0,
-=======
     "likeCount" INTEGER NOT NULL DEFAULT 0,
->>>>>>> main
     "createdAt" TIMESTAMP NOT NULL DEFAULT NOW()
 );
 

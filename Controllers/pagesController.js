@@ -20,16 +20,23 @@ export async function getAllPosts(req,res) {
   try {
     const { rows : posts} = await postsRepository.getAllPosts()
     const response = [];
-    for (let i =0; i < posts.length; i++) {
-      const snnipet = await urlMetadata(posts[i].link)
-      console.log(snnipet)
-      return response.push({
-        ...posts[i],
 
-      })
+    if (posts) {
+      for (let i =0; i < posts.length; i++) {
+        const snnipet = await urlMetadata(posts[i].link)
+  
+        response.push({
+          ...posts[i],
+          linkTitle: snnipet.title,
+          linkDesc: snnipet.description,
+          linkImg: snnipet.image
+        })
+      }
     }
+
+    console.log('oi')
     
-    return res.send(posts)
+    return res.send(response)
   }
   catch (e) {
     console.log(chalk.bold.red(e));
