@@ -1,8 +1,8 @@
 import chalk from "chalk";
+import urlMetadata from "url-metadata"
 
 import postsRepository from "../Repositories/postsRepository.js";
 import hashtagRepository from "../Repositories/hashtagsRepository.js";
-import urlMetadata from "url-metadata"
 
 export async function getPostByHashtag(req, res) {
   const { id } = res.locals.hashtag;
@@ -67,5 +67,40 @@ export async function getTrendingHashtags(req, res){
   } catch (e) {
     console.log(e);
     return res.sendStatus(500);
+  }
+}
+
+export async function updatePost(req, res){
+  try {
+    const { user } = res.locals;
+    const { postId } = req.params;
+    const { description } = req.body;
+
+    const { rows : posts } =  await postsRepository.getPostById(user.id, postId);
+    if(posts.length === 0) return res.sendStatus(404);
+
+    await postsRepository.updatePost(postId, description);
+
+    res.sendStatus(200);
+  } catch (e) {
+    console.log(e);
+    return res.status(500).send("Error while updating post.");
+  }
+}
+
+export async function deletePost(req, res){
+  try {
+    const { user } = res.locals;
+    const { postId } = req.params;
+
+    const { rows : posts } =  await postsRepository.getPostById(user.id, postId);
+    if(posts.length === 0) return res.sendStatus(404);
+
+    await postsRepository.deletePost(postId);
+
+    res.sendStatus(200);
+  } catch (e) {
+    console.log(e);
+    return res.status(500).send("Error while deleting post.");
   }
 }

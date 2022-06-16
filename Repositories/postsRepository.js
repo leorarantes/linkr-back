@@ -27,10 +27,37 @@ async function postUserUrl(values){
   `, values);
 }
 
+async function getPostById(userId, postId){
+  return connection.query(`
+    SELECT *
+    FROM posts
+    WHERE "userId" = $1 AND id = $2;
+  `, [userId, postId]);
+};
+
+async function updatePost(postId, description){
+  return connection.query(`
+    UPDATE posts
+    SET description = $1
+    WHERE id = $2;
+  `, [description, postId]);
+};
+
+async function deletePost(postId){
+  return connection.query(`
+    DELETE
+    FROM posts
+    WHERE id = $1;
+  `, [postId]);
+};
+
 const postsRepository = {
   getPostInfoByHashtag,
   postUserUrl,
-  getAllPosts
+  getAllPosts,
+  getPostById,
+  updatePost,
+  deletePost
 };
 
 export default postsRepository;
