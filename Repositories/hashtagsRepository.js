@@ -8,8 +8,18 @@ async function getHashtagInfo(hashtag){
   `, [hashtag])
 };
 
+async function getTrendingHashtags(){
+  return connection.query(`
+  SELECT name 
+  FROM hashtags
+  ORDER BY "useCount" DESC
+  LIMIT 10;
+  `)
+}
+
 const hashtagRepository = {
-  getHashtagInfo
+  getHashtagInfo,
+  getTrendingHashtags
 };
 
 export default hashtagRepository;
