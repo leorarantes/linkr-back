@@ -24,4 +24,16 @@ async function likePost (req,res) {
 	}
 };
 
-export default likePost
+async function likesInPost (req, res) {
+	const { id } = req.params;
+	try {
+		const { rows : likes } = await likesRepository.getWhoLiked(id)
+
+		return res.send(likes)
+	} catch(err) {
+		console.log(chalk.bold.red(err));
+    	return res.sendStatus(500);
+	}
+}
+
+export {likePost , likesInPost}

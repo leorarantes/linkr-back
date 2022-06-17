@@ -32,7 +32,7 @@ export async function signIn(req, res) {
           const token = uuid();
           await sessionsRepository.createSession(existingUser.rows[0].id, token);
           
-          res.status(200).send({token});
+          res.status(200).send({token, userId: existingUser.rows[0].id});
       } else {
           res.sendStatus(401);
       }
