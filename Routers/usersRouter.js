@@ -1,11 +1,12 @@
 import {Router} from "express";
 
-import { getUser } from "../Controllers/usersController.js";
 import validateToken from "../Middlewares/authValidator.js";
-import validateUserId from "../Middlewares/userValidator.js";
+import { getUser, getUsersByName } from "../Controllers/usersController.js";
+import { validateUserId, validateUsersSearch } from "../Middlewares/userValidator.js";
 
 const usersRouter = Router();
 
 usersRouter.get('/user/:id', validateToken, validateUserId, getUser);
+usersRouter.get('/users/:name', validateToken, validateUsersSearch, getUsersByName)
 
 export default usersRouter;

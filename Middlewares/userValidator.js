@@ -1,6 +1,6 @@
 import usersRepository from "../Repositories/usersRepository.js";
 
-async function validateUserId(req, res, next){
+export async function validateUserId(req, res, next){
   const {id} = req.params;
 
   if(!id){
@@ -23,4 +23,22 @@ async function validateUserId(req, res, next){
   }
 };
 
-export default validateUserId;
+export async function validateUsersSearch(req, res, next){
+  const { name } = req.params;
+  const userName = name.trim();
+
+  if(userName === ''){
+    return res.sendStatus(400);
+  }
+
+  try {
+    const usersRequest = await usersRepository.getUserByName(userName);
+    const usersInfo = usersRequest.rows;
+
+    res.locals.usersInfo = usersInfo;
+    next();
+  } catch (e) {
+    console.log(e);
+    return res.sendStatus(500);
+  }
+}
