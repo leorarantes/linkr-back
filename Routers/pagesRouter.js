@@ -18,6 +18,6 @@ pagesRouter.post('/posts', validateToken, validateSchema(postSchema), postUrl);
 pagesRouter.put('/posts/:postId', validateToken, validateDescription(descriptionSchema), updatePost);
 pagesRouter.delete('/posts/:postId', validateToken, deletePost);
 pagesRouter.get('/hashtag/:hashtag', validateToken, validateHashtag, getPostByHashtag);
-pagesRouter.get('/posts/:userId', validateToken, getPostByUser);
+pagesRouter.get('/posts/:userId', validateToken, validateUserId, getPostByUser);
 
 export default pagesRouter;
