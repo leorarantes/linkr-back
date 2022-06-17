@@ -7,4 +7,15 @@ export async function getUser(req,res){
     console.log(e);
     return res.sendStatus(500);
   }
+};
+
+export async function getUsersByName(req,res){
+  const { usersInfo } = res.locals;
+
+  try {
+    res.status(200).send(usersInfo)
+  } catch (e) {
+    console.log(e);
+    return res.sendStatus(500);
+  }
 }
