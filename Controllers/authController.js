@@ -31,8 +31,9 @@ export async function signIn(req, res) {
       if (existingUser.rowCount > 0 && bcrypt.compareSync(password, existingUser.rows[0].password)) {
           const token = uuid();
           await sessionsRepository.createSession(existingUser.rows[0].id, token);
+          const image = existingUser.rows[0].photoLink;
           
-          res.status(200).send({token});
+          res.status(200).send({token, image});
       } else {
           res.sendStatus(401);
       }
