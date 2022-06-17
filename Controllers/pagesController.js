@@ -18,15 +18,15 @@ export async function getPostByHashtag(req, res) {
   }
 }
 
-export async function getAllPosts(req,res) {
+export async function getAllPosts(req, res) {
   try {
-    const { rows : posts} = await postsRepository.getAllPosts()
+    const { rows: posts } = await postsRepository.getAllPosts()
     const response = [];
 
     if (posts) {
-      for (let i =0; i < posts.length; i++) {
+      for (let i = 0; i < posts.length; i++) {
         const snnipet = await urlMetadata(posts[i].link)
-  
+
         response.push({
           ...posts[i],
           linkTitle: snnipet.title,
@@ -35,7 +35,7 @@ export async function getAllPosts(req,res) {
         })
       }
     }
-    
+
     return res.send(response)
   }
   catch (e) {
@@ -59,7 +59,7 @@ export async function postUrl(req, res) {
   }
 }
 
-export async function getTrendingHashtags(req, res){
+export async function getTrendingHashtags(req, res) {
   try {
     const hashtagsRequest = await hashtagRepository.getTrendingHashtags();
     const trendingHashtags = hashtagsRequest.rows
@@ -70,14 +70,14 @@ export async function getTrendingHashtags(req, res){
   }
 }
 
-export async function updatePost(req, res){
+export async function updatePost(req, res) {
   try {
     const { user } = res.locals;
     const { postId } = req.params;
     const { description } = req.body;
 
-    const { rows : posts } =  await postsRepository.getPostById(user.id, postId);
-    if(posts.length === 0) return res.sendStatus(404);
+    const { rows: posts } = await postsRepository.getPostById(user.id, postId);
+    if (posts.length === 0) return res.sendStatus(404);
 
     await postsRepository.updatePost(postId, description);
 
@@ -88,13 +88,13 @@ export async function updatePost(req, res){
   }
 }
 
-export async function deletePost(req, res){
+export async function deletePost(req, res) {
   try {
     const { user } = res.locals;
     const { postId } = req.params;
 
-    const { rows : posts } =  await postsRepository.getPostById(user.id, postId);
-    if(posts.length === 0) return res.sendStatus(404);
+    const { rows: posts } = await postsRepository.getPostById(user.id, postId);
+    if (posts.length === 0) return res.sendStatus(404);
 
     await postsRepository.deletePost(postId);
 
@@ -102,5 +102,18 @@ export async function deletePost(req, res){
   } catch (e) {
     console.log(e);
     return res.status(500).send("Error while deleting post.");
+  }
+}
+
+export async function getPostByUser(req, res) {
+  const { userId } = req.params;
+
+  try {
+    const postsQuery = await postsRepository.getUserPosts(userId);
+    const userPosts = postsQuery.rows;
+    return res.status(200).send(userPosts);
+  } catch (e) {
+    console.log(e);
+    return res.status(500).send("Error while getting user posts.");
   }
 }

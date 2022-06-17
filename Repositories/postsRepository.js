@@ -51,13 +51,21 @@ async function deletePost(postId){
   `, [postId]);
 };
 
+async function getUserPosts(userId){
+  return connection.query(`
+    SELECT * FROM posts
+    WHERE "userId" = $1;
+  `, [userId]);
+}
+
 const postsRepository = {
   getPostInfoByHashtag,
   postUserUrl,
   getAllPosts,
   getPostById,
   updatePost,
-  deletePost
+  deletePost,
+  getUserPosts
 };
 
 export default postsRepository;

@@ -28,9 +28,18 @@ async function getUserById(id){
   `, [id]);
 }
 
+async function getUserByName(name){
+  return connection.query(`
+    SELECT users.name, users."photoLink", users.id
+    FROM users
+    WHERE name ILIKE $1
+  `, [name + '%'])
+}
+
 const usersRepository = {
   createUser,
   getUserById,
+  getUserByName,
   checkUserEmail
 };
 
