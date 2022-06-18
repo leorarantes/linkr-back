@@ -2,7 +2,7 @@ import {Router} from "express";
 
 import validateToken from "../Middlewares/authValidator.js";
 import validateHashtag from "../Middlewares/validateHashtag.js";
-import validateUserId from "../Middlewares/userValidator.js";
+import { validateUserId } from "../Middlewares/userValidator.js";
 import { validateSchema } from "../Middlewares/validateSchema.js";
 import { validateDescription } from "../Middlewares/validateDescription.js";
 import { getPostByHashtag, getTrendingHashtags, postUrl, getAllPosts, updatePost, deletePost, getPostByUser } from "../Controllers/pagesController.js";
