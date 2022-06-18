@@ -33,7 +33,7 @@ export async function signIn(req, res) {
           await sessionsRepository.createSession(existingUser.rows[0].id, token);
           const image = existingUser.rows[0].photoLink;
           
-          res.status(200).send({token, image});
+          res.status(200).send({token, image, userId:existingUser.rows[0].id});
       } else {
           res.sendStatus(401);
       }
