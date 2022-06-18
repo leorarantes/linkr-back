@@ -1,14 +1,14 @@
 import usersRepository from "../Repositories/usersRepository.js";
 
 export async function validateUserId(req, res, next){
-  const {id} = req.params;
+  const {userId} = req.params;
 
-  if(!id){
+  if(!userId){
     return res.status(401).send('No user id');
   }
 
   try {
-    const userRequest = await usersRepository.getUserById(id);
+    const userRequest = await usersRepository.getUserById(userId);
     
     if(userRequest.rowCount === 0){
       return res.status(404).send(`User doesn't exist`);
@@ -31,14 +31,6 @@ export async function validateUsersSearch(req, res, next){
     return res.sendStatus(400);
   }
 
-  try {
-    const usersRequest = await usersRepository.getUserByName(userName);
-    const usersInfo = usersRequest.rows;
-
-    res.locals.usersInfo = usersInfo;
-    next();
-  } catch (e) {
-    console.log(e);
-    return res.sendStatus(500);
-  }
+  res.locals.userName = userName;
+  next();
 }

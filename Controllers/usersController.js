@@ -1,3 +1,5 @@
+import usersRepository from "../Repositories/usersRepository.js";
+
 export async function getUser(req,res){
   const {user} = res.locals;
 
@@ -10,9 +12,12 @@ export async function getUser(req,res){
 };
 
 export async function getUsersByName(req,res){
-  const { usersInfo } = res.locals;
+  const { userName } = res.locals;
 
   try {
+    const usersRequest = await usersRepository.getUserByName(userName);
+    const usersInfo = usersRequest.rows;
+
     res.status(200).send(usersInfo)
   } catch (e) {
     console.log(e);
