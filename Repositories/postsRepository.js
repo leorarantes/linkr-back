@@ -43,7 +43,19 @@ async function updatePost(postId, description){
   `, [description, postId]);
 };
 
-async function deletePost(postId){
+async function deletePost(postId) {
+  await connection.query(`
+    DELETE
+    FROM likes
+    WHERE "postId" = $1;
+  `, [postId]);
+
+  await connection.query(`
+    DELETE
+    FROM "postsHashtags"
+    WHERE "postId" = $1;
+  `, [postId]);
+
   return connection.query(`
     DELETE
     FROM posts
