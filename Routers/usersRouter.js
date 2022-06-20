@@ -6,7 +6,7 @@ import { validateUserId, validateUsersSearch } from "../Middlewares/userValidato
 
 const usersRouter = Router();
 
-usersRouter.get('/user/:id', validateToken, validateUserId, getUser);
+usersRouter.get('/user/:userId', validateToken, validateUserId, getUser);
 usersRouter.get('/users/:name', validateToken, validateUsersSearch, getUsersByName)
 
 export default usersRouter;
