@@ -31,14 +31,6 @@ export async function validateUsersSearch(req, res, next){
     return res.sendStatus(400);
   }
 
-  try {
-    const usersRequest = await usersRepository.getUserByName(userName);
-    const usersInfo = usersRequest.rows;
-
-    res.locals.usersInfo = usersInfo;
-    next();
-  } catch (e) {
-    console.log(e);
-    return res.sendStatus(500);
-  }
+  res.locals.userName = userName;
+  next();
 }
