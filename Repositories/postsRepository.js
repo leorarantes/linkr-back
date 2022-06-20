@@ -58,6 +58,13 @@ async function getUserPosts(userId){
   `, [userId]);
 }
 
+async function postHashtag(hashtag){
+  return connection.query(`
+    INSERT INTO hashtags(name) 
+    VALUES($1);
+  `, [hashtag]);
+}
+
 const postsRepository = {
   getPostInfoByHashtag,
   postUserUrl,
@@ -65,7 +72,8 @@ const postsRepository = {
   getPostById,
   updatePost,
   deletePost,
-  getUserPosts
+  getUserPosts,
+  postHashtag
 };
 
 export default postsRepository;
