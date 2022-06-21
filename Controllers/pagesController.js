@@ -3,6 +3,7 @@ import urlMetadata from "url-metadata"
 
 import postsRepository from "../Repositories/postsRepository.js";
 import hashtagRepository from "../Repositories/hashtagsRepository.js";
+import { hash } from "bcrypt";
 
 export async function getPostByHashtag(req, res) {
   const { id } = res.locals.hashtag;
@@ -16,7 +17,7 @@ export async function getPostByHashtag(req, res) {
     console.log(chalk.bold.red(e));
     return res.sendStatus(500);
   }
-}
+};
 
 export async function getAllPosts(req, res) {
   try {
@@ -116,4 +117,33 @@ export async function getPostByUser(req, res) {
     console.log(e);
     return res.status(500).send("Error while getting user posts.");
   }
+};
+
+export async function postHashtag(req, res){
+  const { hashtag } = req.body;
+  try {
+    await postsRepository.postHashtag(hashtag);
+    return res.sendStatus(200);
+  } catch (e) {
+    console.log(e);
+    return res.sendStatus(500);
+  }
+};
+
+export async function postHashtagsPost(req,res){
+  const { hashtag } = req.body;
+  const { postInfo } = res.locals;
+
+  try {
+    const hashtagRequest = await hashtagRepository.getHashtagInfo(hashtag);
+    const [hashtagInfo] = hashtagRequest.rows;
+    
+    await postsRepository.postHashtagsPosts(hashtagInfo.id, postInfo.id);
+
+    return res.sendStatus(200);
+  } catch (e) {
+    console.log(e);
+    return res.sendStatus(500);
+  }
 }
+
