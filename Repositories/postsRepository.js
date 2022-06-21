@@ -10,12 +10,20 @@ async function getPostInfoByHashtag(hashtagId){
   `, [hashtagId])
 };
 
+async function getPostInfoByHashtagName(hashtagName){
+  return connection.query(`
+    SELECT *
+    FROM posts
+    WHERE description LIKE $1
+  `, ['%#' + hashtagName + '%']);
+};
+
 async function getAllPosts(){
   return connection.query(`
       SELECT p.*, u.name AS username, u."photoLink" 
       FROM posts p
       JOIN users u 
-        ON p."userId" = u.id
+      ON p."userId" = u.id
       ORDER BY "createdAt" DESC
       LIMIT 20
     `)
@@ -63,7 +71,14 @@ async function postHashtag(hashtag){
     INSERT INTO hashtags(name) 
     VALUES($1);
   `, [hashtag]);
-}
+};
+
+async function postHashtagsPosts(hashtagId, postId){
+  return connection.query(`
+    INSERT INTO "postsHashtags"("hashtagId", "postId") 
+    VALUES($1, $2);
+  `, [hashtagId, postId]);
+};
 
 const postsRepository = {
   getPostInfoByHashtag,
@@ -73,7 +88,9 @@ const postsRepository = {
   updatePost,
   deletePost,
   getUserPosts,
-  postHashtag
+  postHashtag,
+  getPostInfoByHashtagName,
+  postHashtagsPosts
 };
 
 export default postsRepository;

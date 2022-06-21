@@ -17,7 +17,7 @@ export async function getPostByHashtag(req, res) {
     console.log(chalk.bold.red(e));
     return res.sendStatus(500);
   }
-}
+};
 
 export async function getAllPosts(req, res) {
   try {
@@ -126,6 +126,24 @@ export async function postHashtag(req, res){
     return res.sendStatus(200);
   } catch (e) {
     console.log(e);
-    return res.status(500).send("Error while getting user posts.");
+    return res.sendStatus(500);
+  }
+};
+
+export async function postHashtagsPost(req,res){
+  const { hashtag } = req.body;
+  const { postInfo } = res.locals;
+
+  try {
+    const hashtagRequest = await hashtagRepository.getHashtagInfo(hashtag);
+    const [hashtagInfo] = hashtagRequest.rows;
+    
+    await postsRepository.postHashtagsPosts(hashtagInfo.id, postInfo.id);
+
+    return res.sendStatus(200);
+  } catch (e) {
+    console.log(e);
+    return res.sendStatus(500);
   }
 }
+
