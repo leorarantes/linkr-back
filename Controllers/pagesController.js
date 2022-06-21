@@ -6,6 +6,7 @@ import hashtagRepository from "../Repositories/hashtagsRepository.js";
 
 export async function getPostByHashtag(req, res) {
   const { id } = res.locals.hashtag;
+  const response = [];
 
   try {
     const postRequest = await postsRepository.getPostInfoByHashtag(id);
@@ -120,12 +121,26 @@ export async function deletePost(req, res) {
 
 export async function getPostByUser(req, res) {
   const { userId } = req.params;
+  const response = [];
 
   try {
     const postsQuery = await postsRepository.getUserPosts(userId);
-    const userPosts = postsQuery.rows;
-    
-    return res.status(200).send(userPosts);
+    const posts = postsQuery.rows;
+
+    if (posts) {
+      for (let i = 0; i < posts.length; i++) {
+        const snnipet = await urlMetadata(posts[i].link)
+
+        response.push({
+          ...posts[i],
+          linkTitle: snnipet.title,
+          linkDesc: snnipet.description,
+          linkImg: snnipet.image
+        })
+      }
+    }
+
+    return res.status(200).send(response)
   } catch (e) {
     console.log(e);
     return res.status(500).send("Error while getting user posts.");
