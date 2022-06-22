@@ -5,10 +5,10 @@ export async function followUser(req, res) {
         const { user } = res.locals;
         const { followedId } = req.params;
 
-        const { rows: posts } = await followsRepository.getFollow(user.id, followedId);
-        if (posts.length === 0) return res.sendStatus(404);
+        const { rows: follows } = await followsRepository.getFollow(user.id, parseInt(followedId));
+        if (follows.length > 0) return res.sendStatus(409);
 
-        await postsRepository.followUser(user.id, followedId);
+        await followsRepository.followUser(user.id, followedId);
 
         res.sendStatus(200);
     } catch (e) {
@@ -22,10 +22,10 @@ export async function unfollowUser(req, res) {
         const { user } = res.locals;
         const { followedId } = req.params;
 
-        const { rows: posts } = await followsRepository.getFollow(user.id, followedId);
-        if (posts.length === 0) return res.sendStatus(404);
+        const { rows: follows } = await followsRepository.getFollow(user.id, parseInt(followedId));
+        if (follows.length === 0) return res.sendStatus(404);
 
-        await postsRepository.unfollowUser(user.id, followedId);
+        await followsRepository.unfollowUser(user.id, followedId);
 
         res.sendStatus(200);
     } catch (e) {
