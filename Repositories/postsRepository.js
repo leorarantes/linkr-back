@@ -6,7 +6,8 @@ async function getPostInfoByHashtag(hashtagId){
     FROM posts
     JOIN "postsHashtags" as ph
     ON ph."postId" = posts.id
-    WHERE ph."hashtagId" = $1;
+    WHERE ph."hashtagId" = $1
+    ORDER BY posts."createdAt" DESC;
   `, [hashtagId])
 };
 
@@ -74,7 +75,8 @@ async function deletePost(postId) {
 async function getUserPosts(userId){
   return connection.query(`
     SELECT * FROM posts
-    WHERE "userId" = $1;
+    WHERE "userId" = $1
+    ORDER BY "createdAt" DESC;;
   `, [userId]);
 }
 
