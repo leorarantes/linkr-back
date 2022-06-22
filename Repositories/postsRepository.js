@@ -92,6 +92,27 @@ async function postHashtagsPosts(hashtagId, postId){
   `, [hashtagId, postId]);
 };
 
+async function getCommentsCount(postId){
+  return connection.query(`
+    SELECT COUNT(id)
+    FROM comments
+    WHERE "postId" = $1;
+  `, [postId]);
+};
+
+async function getComments(postId){
+  return connection.query(`
+    SELECT c.*,u.name, u."photoLink"
+    FROM comments AS c
+    JOIN "users" AS u
+    ON u.id = "commenterId"
+    WHERE "postId" = $1
+    ORDER BY c."createdAt" ASC;
+  `, [postId]);
+};
+
+
+
 const postsRepository = {
   getPostInfoByHashtag,
   postUserUrl,
@@ -102,7 +123,9 @@ const postsRepository = {
   getUserPosts,
   postHashtag,
   getPostInfoByHashtagName,
-  postHashtagsPosts
+  postHashtagsPosts,
+  getCommentsCount,
+  getComments
 };
 
 export default postsRepository;
