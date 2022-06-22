@@ -113,6 +113,12 @@ async function getComments(postId){
   `, [postId]);
 };
 
+async function getNewPosts(postId){
+  return connection.query(`
+    SELECT COUNT(*) FROM posts
+    WHERE id > $1;
+  `, [postId]);
+}
 
 
 const postsRepository = {
@@ -127,7 +133,8 @@ const postsRepository = {
   getPostInfoByHashtagName,
   postHashtagsPosts,
   getCommentsCount,
-  getComments
+  getComments,
+  getNewPosts
 };
 
 export default postsRepository;

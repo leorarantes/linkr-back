@@ -5,7 +5,7 @@ import { getPostByHashtagName, hashtagExists, validateHashtag } from "../Middlew
 import { validateUserId } from "../Middlewares/userValidator.js";
 import { validateSchema } from "../Middlewares/validateSchema.js";
 import { validateDescription } from "../Middlewares/validateDescription.js";
-import { getPostByHashtag, getTrendingHashtags, postUrl, getAllPosts, updatePost, deletePost, getPostByUser, postHashtag, postHashtagsPost, getCommentsAmount, getComments } from "../Controllers/pagesController.js";
+import { getPostByHashtag, getTrendingHashtags, postUrl, getAllPosts, updatePost, deletePost, getPostByUser, postHashtag, postHashtagsPost, getCommentsAmount, getComments, getNewPosts } from "../Controllers/pagesController.js";
 
 import postSchema from "../Schemas/postSchema.js";
 import descriptionSchema from "../Schemas/descriptionSchema.js";
@@ -16,6 +16,7 @@ pagesRouter.get('/timeline', validateToken, getAllPosts);
 pagesRouter.get('/trending', getTrendingHashtags);
 pagesRouter.get('/hashtag/:hashtag', validateToken, validateHashtag, getPostByHashtag);
 pagesRouter.get('/posts/:userId', validateToken, validateUserId, getPostByUser);
+pagesRouter.get('/new-posts/:postId', validateToken, getNewPosts);
 pagesRouter.post('/posts', validateToken, validateSchema(postSchema), postUrl);
 pagesRouter.post('/hashtag', validateToken, hashtagExists, postHashtag);
 pagesRouter.post('/hashtagsPosts', validateToken, getPostByHashtagName, postHashtagsPost);
