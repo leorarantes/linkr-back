@@ -19,15 +19,18 @@ async function getPostInfoByHashtagName(hashtagName){
   `, ['%#' + hashtagName + '%']);
 };
 
-async function getAllPosts(){
+async function getAllPosts(userId){
   return connection.query(`
-      SELECT p.*, u.name AS username, u."photoLink" 
-      FROM posts p
-      JOIN users u 
-      ON p."userId" = u.id
-      ORDER BY "createdAt" DESC
-      LIMIT 20
-    `)
+    SELECT DISTINCT ON (p.id) u.name AS username, u."photoLink", p.*, f.*
+    FROM users AS u
+    JOIN posts AS p
+    ON u.id = p."userId"
+    JOIN follows AS f
+    ON p."userId" = f."followedId"
+    WHERE f."followerId" = $1 OR p."userId" = $1
+    ORDER BY p.id  desc
+    LIMIT 20
+  `, [userId])
 };
 
 async function postUserUrl(values){
@@ -106,7 +109,6 @@ async function getNewPosts(postId){
     WHERE id > $1;
   `, [postId]);
 }
-
 
 const postsRepository = {
   getPostInfoByHashtag,

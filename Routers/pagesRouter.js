@@ -12,7 +12,7 @@ import descriptionSchema from "../Schemas/descriptionSchema.js";
 
 const pagesRouter = Router();
 
-pagesRouter.get('/timeline', validateToken, getAllPosts);
+pagesRouter.get('/timeline/:userId', validateToken, getAllPosts);
 pagesRouter.get('/trending', getTrendingHashtags);
 pagesRouter.get('/hashtag/:hashtag', validateToken, validateHashtag, getPostByHashtag);
 pagesRouter.get('/posts/:userId', validateToken, validateUserId, getPostByUser);
