@@ -196,7 +196,14 @@ export async function getComments(req, res){
   try {
     const postRequest = await postsRepository.getComments(postId);
     const comments = postRequest.rows;
+
     const structuredComments = comments.map(comment => {
+      let isFollower;
+      if(comment.authorId === comment.followedId && comment.followerId === comment.commenterId){
+        isFollower = true;
+      }else{
+        isFollower = false;
+      }
       return {
         id: comment.id,
         authorId: comment.authorId,
@@ -205,7 +212,8 @@ export async function getComments(req, res){
           id: comment.commenterId,
           username: comment.name,
           image: comment.photoLink,
-          comment: comment.comment
+          comment: comment.comment,
+          isFollower
         }
       }
     })

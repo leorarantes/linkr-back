@@ -22,6 +22,6 @@ pagesRouter.post('/hashtagsPosts', validateToken, getPostByHashtagName, postHash
 pagesRouter.put('/posts/:postId', validateToken, validateDescription(descriptionSchema), updatePost);
 pagesRouter.delete('/posts/:postId', validateToken, deletePost);
 pagesRouter.get('/comments/count/:postId', validateToken, getCommentsAmount);
-pagesRouter.get('/comments/:postId',  getComments)
+pagesRouter.get('/comments/:postId', validateToken, getComments)
 
 export default pagesRouter;

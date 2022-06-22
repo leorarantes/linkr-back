@@ -102,10 +102,12 @@ async function getCommentsCount(postId){
 
 async function getComments(postId){
   return connection.query(`
-    SELECT c.*,u.name, u."photoLink"
+    SELECT c.*,u.name, u."photoLink", f."followerId", f."followedId"
     FROM comments AS c
     JOIN "users" AS u
     ON u.id = "commenterId"
+    LEFT JOIN "follows" AS f
+    ON f."followerId" = c."commenterId" AND f."followedId" = c."authorId"
     WHERE "postId" = $1
     ORDER BY c."createdAt" ASC;
   `, [postId]);
