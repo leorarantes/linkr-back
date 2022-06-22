@@ -48,7 +48,7 @@ CREATE TABLE "postsHashtags" (
 
 CREATE TABLE "follows" (
     "id" SERIAL PRIMARY KEY,
-    "followerId" INTEGER NOT NULL REFERENCES "hashtags"("id"),
-    "followedId" INTEGER NOT NULL REFERENCES "posts"("id"),
+    "followerId" INTEGER NOT NULL REFERENCES "users"("id"),
+    "followedId" INTEGER NOT NULL REFERENCES "users"("id"),
     "createdAt" TIMESTAMP NOT NULL DEFAULT NOW()
 );
