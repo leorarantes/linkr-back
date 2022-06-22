@@ -23,4 +23,18 @@ export async function getUsersByName(req,res){
     console.log(e);
     return res.sendStatus(500);
   }
+};
+
+export async function getFollowersAmmount(req, res){
+  const { userId } = req.params;
+
+  try {
+    const followersRequest = await usersRepository.getFollowersAmmount(userId);
+    const followersAmmount = followersRequest.rows;
+
+    return res.status(200).send(followersAmmount);
+  } catch (e) {
+    console.log(e);
+    return res.sendStatus(500);
+  }
 }

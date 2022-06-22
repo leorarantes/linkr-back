@@ -34,8 +34,10 @@ export async function getPostByHashtag(req, res) {
 };
 
 export async function getAllPosts(req, res) {
+  const { userId } = req.params;
+
   try {
-    const { rows: posts } = await postsRepository.getAllPosts()
+    const { rows: posts } = await postsRepository.getAllPosts(userId)
     const response = [];
 
     if (posts) {
