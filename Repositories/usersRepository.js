@@ -34,13 +34,24 @@ async function getUserByName(name){
     FROM users
     WHERE name ILIKE $1
   `, [name + '%'])
+};
+
+async function getFollowersAmmount(userId){
+  return connection.query(`
+    SELECT COUNT(DISTINCT f."followedId") AS "followsAmmount", COUNT(p.*) AS "postsAmmount"
+    FROM follows as f
+    LEFT JOIN posts as p
+    ON p."userId" = f."followedId"
+    WHERE f."followerId" = $1
+  `, [userId])
 }
 
 const usersRepository = {
   createUser,
   getUserById,
   getUserByName,
-  checkUserEmail
+  checkUserEmail,
+  getFollowersAmmount
 };
 
 export default usersRepository;
