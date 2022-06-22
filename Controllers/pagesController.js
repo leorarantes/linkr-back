@@ -150,7 +150,7 @@ export async function getPostByUser(req, res) {
   }
 };
 
-export async function postHashtag(req, res){
+export async function postHashtag(req, res) {
   const { hashtag } = req.body;
   try {
     await postsRepository.postHashtag(hashtag);
@@ -161,14 +161,14 @@ export async function postHashtag(req, res){
   }
 };
 
-export async function postHashtagsPost(req,res){
+export async function postHashtagsPost(req, res) {
   const { hashtag } = req.body;
   const { postInfo } = res.locals;
 
   try {
     const hashtagRequest = await hashtagRepository.getHashtagInfo(hashtag);
     const [hashtagInfo] = hashtagRequest.rows;
-    
+
     await postsRepository.postHashtagsPosts(hashtagInfo.id, postInfo.id);
 
     return res.sendStatus(200);
@@ -178,7 +178,7 @@ export async function postHashtagsPost(req,res){
   }
 };
 
-export async function getCommentsAmount(req, res){
+export async function getCommentsAmount(req, res) {
   const { postId } = req.params;
 
   try {
@@ -192,7 +192,7 @@ export async function getCommentsAmount(req, res){
   }
 };
 
-export async function getComments(req, res){
+export async function getComments(req, res) {
   const { postId } = req.params;
 
   try {
@@ -201,9 +201,9 @@ export async function getComments(req, res){
 
     const structuredComments = comments.map(comment => {
       let isFollower;
-      if(comment.authorId === comment.followedId && comment.followerId === comment.commenterId){
+      if (comment.authorId === comment.followedId && comment.followerId === comment.commenterId) {
         isFollower = true;
-      }else{
+      } else {
         isFollower = false;
       }
       return {
@@ -225,5 +225,20 @@ export async function getComments(req, res){
     console.log(e);
     return res.sendStatus(500);
   }
+}
+
+export async function getNewPosts(req, res) {
+  const { postId } = req.params;
+
+  try{
+    const newPostsQuery = await postsRepository.getNewPosts(postId);
+    const newPostsCount = newPostsQuery.rows;
+
+    return res.status(200).send(newPostsCount);
+  }catch(e){
+    console.log(e);
+    return res.sendStatus(500);
+  }
+    
 }
 
