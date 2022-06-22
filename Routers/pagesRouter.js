@@ -17,12 +17,12 @@ pagesRouter.get('/trending', getTrendingHashtags);
 pagesRouter.get('/hashtag/:hashtag', validateToken, validateHashtag, getPostByHashtag);
 pagesRouter.get('/posts/:userId', validateToken, validateUserId, getPostByUser);
 pagesRouter.get('/new-posts/:postId', validateToken, getNewPosts);
+pagesRouter.get('/comments/count/:postId', validateToken, getCommentsAmount);
+pagesRouter.get('/comments/:postId', validateToken, getComments);
 pagesRouter.post('/posts', validateToken, validateSchema(postSchema), postUrl);
 pagesRouter.post('/hashtag', validateToken, hashtagExists, postHashtag);
 pagesRouter.post('/hashtagsPosts', validateToken, getPostByHashtagName, postHashtagsPost);
 pagesRouter.put('/posts/:postId', validateToken, validateDescription(descriptionSchema), updatePost);
 pagesRouter.delete('/posts/:postId', validateToken, deletePost);
-pagesRouter.get('/comments/count/:postId', validateToken, getCommentsAmount);
-pagesRouter.get('/comments/:postId', validateToken, getComments)
 
 export default pagesRouter;
