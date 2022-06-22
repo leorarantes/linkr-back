@@ -46,6 +46,15 @@ CREATE TABLE "postsHashtags" (
     "createdAt" TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
+CREATE TABLE "comments" (
+    "id" SERIAL PRIMARY KEY,
+    "commenterId" INTEGER NOT NULL REFERENCES "users"("id"),
+    "authorId" INTEGER NOT NULL REFERENCES "users"("id"),
+    "postId" INTEGER NOT NULL REFERENCES "posts"("id"),
+    "comment" TEXT NOT NULL,
+    "createdAt" TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
 CREATE TABLE "follows" (
     "id" SERIAL PRIMARY KEY,
     "followerId" INTEGER NOT NULL REFERENCES "users"("id"),

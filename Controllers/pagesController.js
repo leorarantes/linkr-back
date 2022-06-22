@@ -3,6 +3,7 @@ import urlMetadata from "url-metadata"
 
 import postsRepository from "../Repositories/postsRepository.js";
 import hashtagRepository from "../Repositories/hashtagsRepository.js";
+import usersRepository from "../Repositories/usersRepository.js";
 
 export async function getPostByHashtag(req, res) {
   const { id } = res.locals.hashtag;
@@ -169,6 +170,55 @@ export async function postHashtagsPost(req,res){
     await postsRepository.postHashtagsPosts(hashtagInfo.id, postInfo.id);
 
     return res.sendStatus(200);
+  } catch (e) {
+    console.log(e);
+    return res.sendStatus(500);
+  }
+};
+
+export async function getCommentsAmount(req, res){
+  const { postId } = req.params;
+
+  try {
+    const postRequest = await postsRepository.getCommentsCount(postId);
+    const commentAmount = postRequest.rows;
+
+    return res.status(200).send(commentAmount);
+  } catch (e) {
+    console.log(e);
+    return res.sendStatus(500);
+  }
+};
+
+export async function getComments(req, res){
+  const { postId } = req.params;
+
+  try {
+    const postRequest = await postsRepository.getComments(postId);
+    const comments = postRequest.rows;
+
+    const structuredComments = comments.map(comment => {
+      let isFollower;
+      if(comment.authorId === comment.followedId && comment.followerId === comment.commenterId){
+        isFollower = true;
+      }else{
+        isFollower = false;
+      }
+      return {
+        id: comment.id,
+        authorId: comment.authorId,
+        postId: comment.postId,
+        commenter: {
+          id: comment.commenterId,
+          username: comment.name,
+          image: comment.photoLink,
+          comment: comment.comment,
+          isFollower
+        }
+      }
+    })
+
+    return res.status(200).send(structuredComments);
   } catch (e) {
     console.log(e);
     return res.sendStatus(500);
