@@ -61,6 +61,12 @@ async function deletePost(postId) {
 
   await connection.query(`
     DELETE
+    FROM comments
+    WHERE "postId" = $1;
+  `, [postId]);
+
+  await connection.query(`
+    DELETE
     FROM "postsHashtags"
     WHERE "postId" = $1;
   `, [postId]);
