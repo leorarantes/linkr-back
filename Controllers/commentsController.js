@@ -3,7 +3,7 @@ import commentsRepository from "../Repositories/commentsRepository.js";
 export async function postComment (req, res) {
 	const { user } = res.locals;
 	const { postId, comment, authorId} = req.body;
-
+	
 	try {
 		await commentsRepository.commentPubli(user.id, authorId, postId, comment)
 

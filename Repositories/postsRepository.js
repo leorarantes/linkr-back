@@ -21,7 +21,7 @@ async function getPostInfoByHashtagName(hashtagName){
 
 async function getAllPosts(userId){
   return connection.query(`
-    SELECT DISTINCT ON (p.id) u.name AS username, u."photoLink", p.*, f.*
+    SELECT DISTINCT ON (p.id) u.name AS username, u."photoLink", p.*, f."followerId", f."followedId"
     FROM users AS u
     JOIN posts AS p
     ON u.id = p."userId"

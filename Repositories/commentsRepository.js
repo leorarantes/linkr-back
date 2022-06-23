@@ -2,7 +2,7 @@ import connection from "../config/db.js";
 
 async function commentPubli (commenterId, authorId, postId, comment) {
 	return connection.query(`
-		INSERt INTO comments ("commenterId", "authorId", "postId", comment)
+		INSERT INTO comments ("commenterId", "authorId", "postId", comment)
 		VALUES ($1,$2,$3,$4)`, [commenterId, authorId, postId, comment])
 }
 
