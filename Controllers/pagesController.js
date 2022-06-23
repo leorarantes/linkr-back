@@ -182,7 +182,7 @@ export async function getNewPosts(req, res) {
 
   try{
     const newPostsQuery = await postsRepository.getNewPosts(postId);
-    const newPostsCount = newPostsQuery.rows;
+    const newPostsCount = newPostsQuery.rows[0];
 
     return res.status(200).send(newPostsCount);
   }catch(e){
