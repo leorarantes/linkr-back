@@ -12,13 +12,27 @@ export async function getUser(req,res){
 };
 
 export async function getUsersByName(req,res){
-  const { userName } = res.locals;
-
+  const { userName, user } = res.locals;
   try {
     const usersRequest = await usersRepository.getUserByName(userName);
     const usersInfo = usersRequest.rows;
 
-    res.status(200).send(usersInfo)
+    const followersRequest = await usersRepository.getFollowers(user.id, userName);
+    const usersFollowers = followersRequest.rows;
+    
+    
+    usersInfo.sort((a,b) =>usersFollowers.some(item => item.id === b.id) - usersFollowers.some(item => item.id === a.id));
+
+    const response = [];
+
+    for(let i = 0; i < usersInfo.length; i++) {
+      response.push({
+        ...usersInfo[i],
+        followed: usersFollowers.some(item => item.id === usersInfo[i].id)
+      })
+    }
+
+    res.status(200).send(response)
   } catch (e) {
     console.log(e);
     return res.sendStatus(500);

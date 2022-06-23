@@ -36,6 +36,14 @@ async function getUserByName(name){
   `, [name + '%'])
 };
 
+async function getFollowers(id, name){
+  return connection.query(`
+    SELECT u.name, u.id FROM follows f
+    JOIN users u ON u.id = f."followedId"
+    WHERE f."followerId" = $1 AND name ILIKE $2
+  `, [id,name + '%'])
+}
+
 async function getFollowersAmmount(userId){
   return connection.query(`
     SELECT COUNT(DISTINCT f."followedId") AS "followsAmmount", COUNT(p.*) AS "postsAmmount"
@@ -51,7 +59,8 @@ const usersRepository = {
   getUserById,
   getUserByName,
   checkUserEmail,
-  getFollowersAmmount
+  getFollowersAmmount,
+  getFollowers
 };
 
 export default usersRepository;
