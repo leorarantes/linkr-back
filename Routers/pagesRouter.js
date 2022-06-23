@@ -6,6 +6,7 @@ import { validateUserId } from "../Middlewares/userValidator.js";
 import { validateSchema } from "../Middlewares/validateSchema.js";
 import { validateDescription } from "../Middlewares/validateDescription.js";
 import { getPostByHashtag, getTrendingHashtags, postUrl, getAllPosts, updatePost, deletePost, getPostByUser, postHashtag, postHashtagsPost, getNewPosts } from "../Controllers/pagesController.js";
+import { getComments, getCommentsAmount } from "../Controllers/commentsController.js";
 
 import postSchema from "../Schemas/postSchema.js";
 import descriptionSchema from "../Schemas/descriptionSchema.js";
