@@ -2,10 +2,12 @@ import connection from "../config/db.js";
 
 async function getPostInfoByHashtag(hashtagId){
   return connection.query(`
-    SELECT posts.*
+    SELECT posts.*, u.name, u."photoLink"
     FROM posts
     JOIN "postsHashtags" as ph
     ON ph."postId" = posts.id
+    JOIN users AS u
+    ON posts."userId" = u.id
     WHERE ph."hashtagId" = $1
     ORDER BY posts."createdAt" DESC;
   `, [hashtagId])
@@ -26,9 +28,9 @@ async function getAllPosts(userId){
     JOIN posts AS p
     ON u.id = p."userId"
     JOIN follows AS f
-    ON p."userId" = f."followedId"
+    ON p."userId" = f."followedId" OR p."userId" = f."followerId"
     WHERE f."followerId" = $1 OR p."userId" = $1
-    ORDER BY p.id  desc
+    ORDER BY p.id DESC
     LIMIT 20
   `, [userId])
 };
@@ -83,9 +85,12 @@ async function deletePost(postId) {
 
 async function getUserPosts(userId){
   return connection.query(`
-    SELECT * FROM posts
+    SELECT p.*, u.name, u."photoLink" 
+    FROM posts AS p
+    JOIN users AS u
+    ON u.id = p."userId"
     WHERE "userId" = $1
-    ORDER BY "createdAt" DESC;;
+    ORDER BY p."createdAt" DESC;
   `, [userId]);
 }
 
