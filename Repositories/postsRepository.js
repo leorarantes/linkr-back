@@ -21,7 +21,7 @@ async function getPostInfoByHashtagName(hashtagName){
 
 async function getAllPosts(userId){
   return connection.query(`
-    SELECT DISTINCT ON (p.id) u.name AS username, u."photoLink", p.*, f.*
+    SELECT DISTINCT ON (p.id) u.name AS username, u."photoLink", p.*, f."followerId", f."followedId"
     FROM users AS u
     JOIN posts AS p
     ON u.id = p."userId"
@@ -64,6 +64,12 @@ async function deletePost(postId) {
 
   await connection.query(`
     DELETE
+    FROM comments
+    WHERE "postId" = $1;
+  `, [postId]);
+
+  await connection.query(`
+    DELETE
     FROM "postsHashtags"
     WHERE "postId" = $1;
   `, [postId]);
@@ -97,27 +103,6 @@ async function postHashtagsPosts(hashtagId, postId){
   `, [hashtagId, postId]);
 };
 
-async function getCommentsCount(postId){
-  return connection.query(`
-    SELECT COUNT(id)
-    FROM comments
-    WHERE "postId" = $1;
-  `, [postId]);
-};
-
-async function getComments(postId){
-  return connection.query(`
-    SELECT c.*,u.name, u."photoLink", f."followerId", f."followedId"
-    FROM comments AS c
-    JOIN "users" AS u
-    ON u.id = "commenterId"
-    LEFT JOIN "follows" AS f
-    ON f."followerId" = c."commenterId" AND f."followedId" = c."authorId"
-    WHERE "postId" = $1
-    ORDER BY c."createdAt" ASC;
-  `, [postId]);
-};
-
 async function getNewPosts(postId){
   return connection.query(`
     SELECT COUNT(*) FROM posts
@@ -136,8 +121,6 @@ const postsRepository = {
   postHashtag,
   getPostInfoByHashtagName,
   postHashtagsPosts,
-  getCommentsCount,
-  getComments,
   getNewPosts
 };
 

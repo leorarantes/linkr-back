@@ -5,7 +5,7 @@ import { getPostByHashtagName, hashtagExists, validateHashtag } from "../Middlew
 import { validateUserId } from "../Middlewares/userValidator.js";
 import { validateSchema } from "../Middlewares/validateSchema.js";
 import { validateDescription } from "../Middlewares/validateDescription.js";
-import { getPostByHashtag, getTrendingHashtags, postUrl, getAllPosts, updatePost, deletePost, getPostByUser, postHashtag, postHashtagsPost, getCommentsAmount, getComments, getNewPosts } from "../Controllers/pagesController.js";
+import { getPostByHashtag, getTrendingHashtags, postUrl, getAllPosts, updatePost, deletePost, getPostByUser, postHashtag, postHashtagsPost, getNewPosts } from "../Controllers/pagesController.js";
 
 import postSchema from "../Schemas/postSchema.js";
 import descriptionSchema from "../Schemas/descriptionSchema.js";
@@ -22,7 +22,5 @@ pagesRouter.post('/hashtag', validateToken, hashtagExists, postHashtag);
 pagesRouter.post('/hashtagsPosts', validateToken, getPostByHashtagName, postHashtagsPost);
 pagesRouter.put('/posts/:postId', validateToken, validateDescription(descriptionSchema), updatePost);
 pagesRouter.delete('/posts/:postId', validateToken, deletePost);
-pagesRouter.get('/comments/count/:postId', validateToken, getCommentsAmount);
-pagesRouter.get('/comments/:postId', validateToken, getComments)
 
 export default pagesRouter;
