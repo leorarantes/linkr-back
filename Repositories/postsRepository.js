@@ -25,9 +25,9 @@ async function getAllPosts(userId){
   return connection.query(`
     SELECT DISTINCT ON (p.id) u.name AS username, u."photoLink", p.*, f."followerId", f."followedId"
     FROM users AS u
-    JOIN posts AS p
+    LEFT JOIN posts AS p
     ON u.id = p."userId"
-    JOIN follows AS f
+    LEFT JOIN follows AS f
     ON p."userId" = f."followedId" OR p."userId" = f."followerId"
     WHERE f."followerId" = $1 OR p."userId" = $1
     ORDER BY p.id DESC
