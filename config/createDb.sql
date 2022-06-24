@@ -35,7 +35,7 @@ CREATE TABLE "likes" (
 CREATE TABLE "hashtags" (
     "id" SERIAL PRIMARY KEY,
     "name" TEXT NOT NULL,
-    "useCount" INTEGER NOT NULL DEFAULT 0,
+    "useCount" INTEGER NOT NULL DEFAULT 1,
     "createdAt" TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
@@ -59,5 +59,12 @@ CREATE TABLE "follows" (
     "id" SERIAL PRIMARY KEY,
     "followerId" INTEGER NOT NULL REFERENCES "users"("id"),
     "followedId" INTEGER NOT NULL REFERENCES "users"("id"),
+    "createdAt" TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE "shares" (
+    "id" SERIAL PRIMARY KEY,
+    "postId" INTEGER NOT NULL REFERENCES "posts"("id"),
+    "userId" INTEGER NOT NULL REFERENCES "users"("id"),
     "createdAt" TIMESTAMP NOT NULL DEFAULT NOW()
 );

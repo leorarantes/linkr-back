@@ -1,3 +1,4 @@
+import { postHashtag } from "../Controllers/pagesController.js";
 import hashtagRepository from "../Repositories/hashtagsRepository.js";
 import postsRepository from "../Repositories/postsRepository.js";
 
@@ -49,7 +50,7 @@ export async function getPostByHashtagName(req, res, next){
     const hashtagRequest = await postsRepository.getPostInfoByHashtagName(hashtag);
 
     if(hashtagRequest.length === 0){
-      return res.sendStatus(404);
+      postHashtag;
     }
 
     const postInfo = hashtagRequest.rows[hashtagRequest.rows.length-1];
