@@ -25,9 +25,9 @@ async function getAllPosts(userId){
   return connection.query(`
     SELECT DISTINCT ON (p.id) u.name AS username, u."photoLink", p.*, f."followerId", f."followedId"
     FROM users AS u
-    JOIN posts AS p
+    LEFT JOIN posts AS p
     ON u.id = p."userId"
-    JOIN follows AS f
+    LEFT JOIN follows AS f
     ON p."userId" = f."followedId" OR p."userId" = f."followerId"
     WHERE f."followerId" = $1 OR p."userId" = $1
     ORDER BY p.id DESC
@@ -92,25 +92,17 @@ async function deletePost(postId) {
 };
 
 async function getUserPosts(userId){
-  /*return connection.query(`
+  return connection.query(`
   SELECT p.*, u.name, u."photoLink" 
   FROM posts AS p
   JOIN users AS u
   ON u.id = p."userId"
-  JOIN shares AS s
-  ON s."userId" = p."userId"
-  WHERE "userId" = $1 OR id = s."postId"
-  ORDER BY p."createdAt" DESC;*/
-
-  return connection.query(`
-    SELECT p.*, u.name, u."photoLink" 
-    FROM posts AS p
-    JOIN users AS u
-    ON u.id = p."userId"
-    WHERE "userId" = $1
-    ORDER BY p."createdAt" DESC;
+  LEFT JOIN shares AS s
+  ON s."postId" = p."id"
+  WHERE p."userId" = $1 or s."userId" = $1
+  ORDER BY p."createdAt" DESC;
   `, [userId]);
-}
+};
 
 async function postHashtag(hashtag){
   return connection.query(`
