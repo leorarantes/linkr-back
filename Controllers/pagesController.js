@@ -34,15 +34,14 @@ export async function getPostByHashtag(req, res) {
 
 export async function getAllPosts(req, res) {
   const { userId } = req.params;
-
+  const { offset } = req.query;
   try {
-    const { rows: posts } = await postsRepository.getAllPosts(userId)
+    const { rows: posts } = await postsRepository.getAllPosts(userId,Number(offset))
     const response = [];
-
+    
     if (posts) {
       for (let i = 0; i < posts.length; i++) {
         const snnipet = await urlMetadata(posts[i].link)
-
         response.push({
           ...posts[i],
           linkTitle: snnipet.title,
@@ -51,6 +50,7 @@ export async function getAllPosts(req, res) {
         })
       }
     }
+    
 
     return res.send(response)
   }
