@@ -22,6 +22,7 @@ CREATE TABLE "posts" (
     "description" TEXT,
     "userId" INTEGER NOT NULL REFERENCES "users"("id"),
     "likeCount" INTEGER NOT NULL DEFAULT 0,
+    "shareCount",
     "createdAt" TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
