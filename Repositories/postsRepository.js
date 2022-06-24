@@ -118,11 +118,14 @@ async function postHashtagsPosts(hashtagId, postId){
   `, [hashtagId, postId]);
 };
 
-async function getNewPosts(postId){
+async function getNewPosts(userId, postId){
   return connection.query(`
-    SELECT COUNT(*) FROM posts
-    WHERE id > $1;
-  `, [postId]);
+    SELECT COUNT(p.id) 
+    FROM posts AS p
+    JOIN follows AS f
+    ON p."userId" = f."followedId"
+    WHERE f."followerId" = $1 AND p.id > $2;
+  `, [userId, postId]);
 }
 
 const postsRepository = {

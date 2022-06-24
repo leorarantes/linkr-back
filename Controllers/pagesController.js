@@ -179,9 +179,10 @@ export async function postHashtagsPost(req, res) {
 
 export async function getNewPosts(req, res) {
   const { postId } = req.params;
+  const { user } = res.locals;
 
   try{
-    const newPostsQuery = await postsRepository.getNewPosts(postId);
+    const newPostsQuery = await postsRepository.getNewPosts(user.id, postId);
     const newPostsCount = newPostsQuery.rows[0];
 
     return res.status(200).send(newPostsCount);
