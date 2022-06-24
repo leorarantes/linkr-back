@@ -14,7 +14,7 @@ async function createSession(userId, token) {
 }
 
 async function expireSession(sessionId) {
-  return connection.query("UPDATE sessions SET expired = TRUE WHERE id = $1", sessionId);
+  return connection.query("UPDATE sessions SET expired = TRUE WHERE id = $1", [sessionId]);
 }
 
 async function updateSessions(sessionId) {

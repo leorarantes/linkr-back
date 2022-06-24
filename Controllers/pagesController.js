@@ -88,12 +88,11 @@ export async function getTrendingHashtags(req, res) {
 
 export async function updatePost(req, res) {
   try {
-    const { user } = res.locals;
     const { postId } = req.params;
     const { description } = req.body;
 
-    const { rows: posts } = await postsRepository.getPostById(user.id, postId);
-    if (posts.length === 0) return res.sendStatus(404);
+    const postQuery = await postsRepository.getPostById(postId);
+    if (postQuery.rowCount === 0) return res.sendStatus(404);
 
     await postsRepository.updatePost(postId, description);
 
@@ -109,7 +108,7 @@ export async function deletePost(req, res) {
     const { user } = res.locals;
     const { postId } = req.params;
 
-    const { rows: posts } = await postsRepository.getPostById(user.id, postId);
+    const { rows: posts } = await postsRepository.getPostById(postId);
     if (posts.length === 0) return res.sendStatus(404);
 
     await postsRepository.deletePost(postId);

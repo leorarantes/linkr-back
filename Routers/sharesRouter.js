@@ -4,6 +4,6 @@ import validateToken from "../Middlewares/authValidator.js";
 
 const sharesRouter = Router();
 
-sharesRouter.post('/share', validateToken, sharePost);
+sharesRouter.post('/shares/:id', validateToken, sharePost);
 
 export default sharesRouter;

@@ -42,12 +42,12 @@ async function postUserUrl(values){
   `, values);
 }
 
-async function getPostById(userId, postId){
+async function getPostById(postId){
   return connection.query(`
     SELECT *
     FROM posts
-    WHERE "userId" = $1 AND id = $2;
-  `, [userId, postId]);
+    WHERE id = $1;
+  `, [postId]);
 };
 
 async function updatePost(postId, description) {

@@ -7,20 +7,21 @@ export async function validateToken(req, res, next) {
     if (!token) return res.status(401).send("No token.");
 
     try {
-        const session = await sessionsRepository.checkToken(token);
-        if (session.rowCount === 0) return res.status(401).send("No session.");
+        const sessionQuery = await sessionsRepository.checkToken(token);
+        if (sessionQuery.rowCount === 0) return res.status(401).send("No session.");
+        const [session] = sessionQuery.rows;
 
         const now = parseFloat((Date.now() / 60000).toFixed(1));
-        const timeDifference = now - session.rows[0].lastStatus;
+        const timeDifference = now - session.lastStatus;
         if (timeDifference > 60) {
-            await sessionsRepository.expireSession(session.rows[0].id);
+            await sessionsRepository.expireSession(session.id);
             return res.status(401).send("Session expired.");
         }
 
-        const user = await usersRepository.getUserById(session.rows[0].userId);
+        const user = await usersRepository.getUserById(session.userId);
         if (user.rowCount === 0) return res.sendStatus(400);
 
-        await sessionsRepository.updateSessions(session.rows[0].id);
+        await sessionsRepository.updateSessions(session.id);
 
         res.locals.user = user.rows[0];
 
