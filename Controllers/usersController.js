@@ -1,4 +1,5 @@
 import usersRepository from "../Repositories/usersRepository.js";
+import followsRepository from "../Repositories/followsRepository.js";
 
 export async function getUser(req,res){
   const {user} = res.locals;
@@ -13,7 +14,7 @@ export async function getUser(req,res){
 
 export async function getOtherUserInfo(req,res){
   const { user } = res.locals;
-  const { otherUserId } = parseInt(req.params.userId);
+  const otherUserId = parseInt(req.params.userId);
   if(otherUserId === 'NaN') return res.sendStatus(400);
   
   try {
@@ -21,7 +22,7 @@ export async function getOtherUserInfo(req,res){
     if(otherUserInfoQuery.rowCount === 0) return res.sendStatus(404);
     const [otherUserInfo] = otherUserInfoQuery.rows;
 
-    const followQuery = await usersRepository.getFollow(user.id, otherUserInfo.id);
+    const followQuery = await followsRepository.getFollow(user.id, otherUserInfo.id);
     if(followQuery.rowCount === 0) {
       const response = {...otherUserInfo, following: false};
       return res.status(200).send(response);
