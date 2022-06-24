@@ -101,16 +101,8 @@ async function getUserPosts(userId){
   ON s."postId" = p."id"
   WHERE p."userId" = $1 or s."userId" = $1
   ORDER BY p."createdAt" DESC;
-
-  return connection.query(`
-    SELECT p.*, u.name, u."photoLink" 
-    FROM posts AS p
-    JOIN users AS u
-    ON u.id = p."userId"
-    WHERE "userId" = $1
-    ORDER BY p."createdAt" DESC;
   `, [userId]);
-}
+};
 
 async function postHashtag(hashtag){
   return connection.query(`
