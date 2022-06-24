@@ -49,12 +49,20 @@ async function getPostById(userId, postId){
   `, [userId, postId]);
 };
 
-async function updatePost(postId, description){
+async function updatePost(postId, description) {
   return connection.query(`
     UPDATE posts
     SET description = $1
     WHERE id = $2;
   `, [description, postId]);
+};
+
+async function updatePostShareCount(shareCount, postId) {
+  return connection.query(`
+    UPDATE posts
+    SET "shareCount" = $1
+    WHERE id = $2;
+  `, [shareCount, postId]);
 };
 
 async function deletePost(postId) {
@@ -84,6 +92,16 @@ async function deletePost(postId) {
 };
 
 async function getUserPosts(userId){
+  return connection.query(`
+  SELECT p.*, u.name, u."photoLink" 
+  FROM posts AS p
+  JOIN users AS u
+  ON u.id = p."userId"
+  LEFT JOIN shares AS s
+  ON s."postId" = p."id"
+  WHERE p."userId" = $1 or s."userId" = $1
+  ORDER BY p."createdAt" DESC;
+
   return connection.query(`
     SELECT p.*, u.name, u."photoLink" 
     FROM posts AS p
@@ -121,6 +139,7 @@ const postsRepository = {
   getAllPosts,
   getPostById,
   updatePost,
+  updatePostShareCount,
   deletePost,
   getUserPosts,
   postHashtag,
