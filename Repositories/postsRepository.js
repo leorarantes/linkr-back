@@ -21,7 +21,7 @@ async function getPostInfoByHashtagName(hashtagName){
   `, ['%#' + hashtagName + '%']);
 };
 
-async function getAllPosts(userId){
+async function getAllPosts(userId,offset){
   return connection.query(`
     SELECT DISTINCT ON (p.id) u.name AS username, u."photoLink", p.*, f."followerId", f."followedId"
     FROM users AS u
@@ -31,8 +31,9 @@ async function getAllPosts(userId){
     ON p."userId" = f."followedId" OR p."userId" = f."followerId"
     WHERE f."followerId" = $1 OR p."userId" = $1
     ORDER BY p.id DESC
-    LIMIT 20
-  `, [userId])
+    LIMIT 10
+    OFFSET $2
+  `, [userId, offset*10])
 };
 
 async function postUserUrl(values){
